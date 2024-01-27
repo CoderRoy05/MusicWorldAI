@@ -5,38 +5,39 @@
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+/* Preloader.css */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Preloader styles */
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  background-image: url(./assets/loading.gif);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: black; /* Fallback color */
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* Hide content when preloader is visible */
+#content {
+  display: none;
 }
 
-.card {
-  padding: 2em;
+/* Display content when loading is complete */
+.app:not(.loading) #content {
+  display: block;
 }
 
-.read-the-docs {
-  color: #888;
-}
+
