@@ -1,45 +1,63 @@
-import React, { useEffect, useState } from 'react';
-import './App.css';
-
-import FileUpload from './FileUpload/FileUpload';
+import React, { useState } from 'react';
+import axios from 'axios';
 
 const App = () => {
-  const [loading, setLoading] = useState(true);
+    const [file, setFile] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [inputFileName, setInputFileName] = useState('');
+    const [outputLocation, setOutputLocation] = useState('');
 
-  useEffect(() => {
-    // Simulate a delay for demonstration purposes
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-    // 7000
+    const handleFileChange = (event) => {
+        setFile(event.target.files[0]);
+    };
 
-    // Cleanup the timer when the component unmounts
-    return () => clearTimeout(timer);
-  }, []);
+    const handleUpload = async () => {
+        if (!file) {
+            alert('Please select a file');
+            return;
+        }
 
+        setLoading(true);
 
-  return (
-    <div className={`app ${loading ? 'loading' : ''}`}>
-      <div className="container">
-          {/* Preloader */}
-          {loading && (
-            <div className="preloader">
-              <div className="spinner"></div>
-            </div>
-          )}
-          {/* Preloader */}
+        const formData = new FormData();
+        formData.append('audioFile', file);
 
-          <FileUpload />
+        try {
+            const response = await axios.post('http://localhost:3000/api/upload', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
 
+            console.log('Server Response:', response.data);
 
-          <div id="content">
-            {/* Website page content */}
-            <h1>Welcome to Your Website</h1>
-          </div>
+            const { inputFileName, outputLocation } = response.data;
 
-      </div>
-    </div>
-  );
+            setInputFileName(inputFileName);
+            setOutputLocation(outputLocation);
+        } catch (error) {
+            console.error('Error uploading file:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div>
+            <input type="file" onChange={handleFileChange} />
+            <button onClick={handleUpload} disabled={loading}>
+                Upload File
+            </button>
+            {loading && <p>Loading...</p>}
+
+            {inputFileName && (
+                <div>
+                    <p>Input File: {inputFileName}</p>
+                    <p>Output Location: {outputLocation}</p>
+                </div>
+            )}
+        </div>
+    );
 };
 
 export default App;
