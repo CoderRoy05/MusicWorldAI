@@ -1,3 +1,4 @@
+const fs = require('fs');
 const express = require('express');
 const path = require('path');
 const multer = require('multer');
@@ -34,3 +35,4 @@ app.post('/api/upload', upload.single('audioFile'), (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
+
